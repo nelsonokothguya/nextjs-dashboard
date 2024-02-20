@@ -9,6 +9,14 @@ import {
   CardSkeleton,
 } from '../../ui/skeletons';
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  description: 'Overview of your financials.',
+  keywords: ['dashboard', 'finance', 'money', 'budget'],
+};
+
 export default async function Page() {
   return (
     <main>
