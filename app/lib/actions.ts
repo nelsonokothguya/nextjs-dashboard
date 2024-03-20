@@ -21,6 +21,7 @@ const FormSchema = z.object({
         invalid_type_error: 'Please select an invoice status'
     }),
     date: z.string(),
+    
 })
 
 const CreateInvoice = FormSchema.omit({id: true, date: true})

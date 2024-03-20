@@ -4,14 +4,14 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Acme Dashboard',
-    default: 'Acme Dashboard',
+    template: '%s | Nelson Dashboard',
+    default: 'Nelson Dashboard',
   },
   description:
-    'The best dashboard for all your financial needs, built with App Router.',
-  keywords: ['dashboard', 'finance', 'money', 'budget'],
+    'The best dashboard for all your financial management needs, built with App Router.',
+  keywords: ['dashboard', 'finance', 'money', 'budget', 'invoice'],
   openGraph: {
-    title: 'Acme Dashboard',
+    title: 'Nelson Dashboard',
     description:
       'The best dashboard for all your financial needs, built with App Router.',
     url: 'https://next-learn-dashboard.vercel.sh/',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
         url: 'https://next-learn-dashboard.vercel.sh/og.png',
         width: 1200,
         height: 630,
-        alt: 'Acme Dashboard',
+        alt: 'Nelson Dashboard',
       },
     ],
   },
