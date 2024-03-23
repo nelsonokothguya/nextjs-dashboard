@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import {signIn} from "../auth"
 import { AuthError } from 'next-auth'
+import Form from '../ui/customers/create-form'
 
 
 
@@ -21,12 +22,15 @@ const FormSchema = z.object({
         invalid_type_error: 'Please select an invoice status'
     }),
     date: z.string(),
+    customerName: z.string(),
+    customerEmail: z.string(),
     
 })
 
 const CreateInvoice = FormSchema.omit({id: true, date: true})
+const CreateCustomer = FormSchema.omit({id: true, status: true, amount: true, customerId: true, date: true})
 
-export type State = {
+export type InvoiceFormState = {
     errors?: {
         customerId?: string[];
         amount?: string[];
@@ -34,6 +38,15 @@ export type State = {
     }
     message?: string | null;
 }
+export type CustomerFormState = {
+    errors?: {
+        customerName?: string[];
+        customerEmail?: string[];
+    }
+    message?: string | null;
+
+}
+
 export async function authenticate(
     prevState: string | undefined,
     formData: FormData,
@@ -52,7 +65,26 @@ export async function authenticate(
     throw error
 }
 }
-export async function createInvoice(prevState: State, formData : FormData) {
+export async function createCustomer(prevState: CustomerFormState, formData: FormData) {
+    const validatedFields = CreateCustomer.safeParse(Object.fromEntries(formData.entries()));
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Create Customer.'
+        }
+    }
+    const {customerName, customerEmail} = CreateCustomer.parse(Object.fromEntries(formData.entries()));
+    try {
+        await sql`INSERT INTO customers (name, email) VALUES (${customerName}, ${customerEmail})`;
+    } catch (error: any) {
+        return {error: error.message}
+    }
+    revalidatePath('/dashboard/customers')
+    redirect('/dashboard/customers')
+
+}
+
+export async function createInvoice(prevState: InvoiceFormState, formData : FormData) {
 
    const validatedFields = CreateInvoice.safeParse(Object.fromEntries(formData.entries()));
 
@@ -81,7 +113,7 @@ export async function createInvoice(prevState: State, formData : FormData) {
 
 const UpdateInvoice = FormSchema.omit({id: true, date: true})
 
-export async function updateInvoice(id: string, prevState: State, formData : FormData) {
+export async function updateInvoice(id: string, prevState: InvoiceFormState, formData : FormData) {
     
     const validatedFields = UpdateInvoice.safeParse(Object.fromEntries(formData.entries()));
     if (!validatedFields.success) {

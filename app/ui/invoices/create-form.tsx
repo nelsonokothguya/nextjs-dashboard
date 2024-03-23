@@ -18,7 +18,8 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
 
   const [state, dispatch] = useFormState(createInvoice, initialState);
 
-  console.log('state', state);
+  console.log('state', state, dispatch);
+
   return (
     <form action={dispatch}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
